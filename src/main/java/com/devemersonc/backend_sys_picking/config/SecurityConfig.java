@@ -36,7 +36,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/users/{user_id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/users/{user_id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/users/user_id").hasRole("ADMIN")
                         //ENDPOINTS PRODUCTCONTROLLER

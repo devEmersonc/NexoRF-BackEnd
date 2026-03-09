@@ -21,7 +21,7 @@ public class Product {
     private Long id;
     private String sku;
     private String name;
-    private int amount;
+    private Integer amount;
     private String location;
     @ManyToOne
     @JoinColumn(
