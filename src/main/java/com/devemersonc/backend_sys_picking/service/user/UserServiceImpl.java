@@ -4,6 +4,7 @@ import com.devemersonc.backend_sys_picking.DTO.RoleRequest;
 import com.devemersonc.backend_sys_picking.DTO.UserCreateDTO;
 import com.devemersonc.backend_sys_picking.DTO.UserResponseDTO;
 import com.devemersonc.backend_sys_picking.DTO.UserUpdateDTO;
+import com.devemersonc.backend_sys_picking.exception.ConflictException;
 import com.devemersonc.backend_sys_picking.exception.ResourceNotFoundException;
 import com.devemersonc.backend_sys_picking.mapper.UserMapper;
 import com.devemersonc.backend_sys_picking.model.Role;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService{
     public void registerUser(UserCreateDTO userCreateDTO, RoleRequest roleRequest) throws ResourceNotFoundException{
         User existingUser = userRepository.findByRut(userCreateDTO.getRut());
         if(existingUser != null) {
-            throw new ResourceNotFoundException("El rut ya está vinculado a un usuario existente.");
+            throw new ConflictException("El rut ya está vinculado a un usuario existente.");
         }
 
         //Buscar el rol en DB

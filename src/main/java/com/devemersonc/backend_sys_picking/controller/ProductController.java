@@ -50,9 +50,15 @@ public class ProductController {
         return ResponseEntity.ok("Producto eliminado.");
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<ProductResponseDTO> getProductBySku(@RequestParam String data) {
-        ProductResponseDTO productResponseDTO = productService.searchProduct(data);
+    @GetMapping("/searchSku")
+    public ResponseEntity<ProductResponseDTO> getProductBySku(@RequestParam String sku) {
+        ProductResponseDTO productResponseDTO = productService.searchProductBySku(sku);
+        return ResponseEntity.ok(productResponseDTO);
+    }
+
+    @GetMapping("/searchName")
+    public ResponseEntity<ProductResponseDTO> getProductByName(@RequestParam String name) {
+        ProductResponseDTO productResponseDTO = productService.searchProdcutByName(name);
         return ResponseEntity.ok(productResponseDTO);
     }
 

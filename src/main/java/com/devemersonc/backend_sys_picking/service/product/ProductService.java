@@ -13,6 +13,7 @@ public interface ProductService {
     void updateProduct(Long product_id, CreateUpdateProductDTO createProductDTO);
     void deleteProduct(Long product_id);
     Product findProductById(Long product_id);
-    ProductResponseDTO searchProduct(String data);
+    ProductResponseDTO searchProductBySku(String sku);
+    ProductResponseDTO searchProdcutByName(String name);
     void discountStock(Long productId, int quantity);
 }

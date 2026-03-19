@@ -46,6 +46,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/products/product_id").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/products/product_id").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/products/searchSku").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/products/searchName").hasRole("ADMIN")
                         //ENDPOINTS ORDERS
                         .requestMatchers(HttpMethod.POST, "/api/orders").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/orders").hasRole("ADMIN")

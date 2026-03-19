@@ -1,6 +1,7 @@
 package com.devemersonc.backend_sys_picking.controller;
 
 import com.devemersonc.backend_sys_picking.DTO.ErrorMessage;
+import com.devemersonc.backend_sys_picking.exception.ConflictException;
 import com.devemersonc.backend_sys_picking.exception.ResourceNotFoundException;
 import org.jspecify.annotations.Nullable;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import com.devemersonc.backend_sys_picking.exception.ConflictException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,5 +34,14 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage());
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorMessage> conflictException(ConflictException exception) {
+        ErrorMessage message = new ErrorMessage(
+                HttpStatus.CONFLICT.value() + HttpStatus.CONFLICT.getReasonPhrase(),
+                exception.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
     }
 }

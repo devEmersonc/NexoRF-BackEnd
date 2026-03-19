@@ -2,6 +2,7 @@ package com.devemersonc.backend_sys_picking.service.product;
 
 import com.devemersonc.backend_sys_picking.DTO.productDTO.CreateUpdateProductDTO;
 import com.devemersonc.backend_sys_picking.DTO.productDTO.ProductResponseDTO;
+import com.devemersonc.backend_sys_picking.exception.ConflictException;
 import com.devemersonc.backend_sys_picking.exception.ResourceNotFoundException;
 import com.devemersonc.backend_sys_picking.mapper.ProductMapper;
 import com.devemersonc.backend_sys_picking.model.Product;
@@ -41,10 +42,14 @@ public class ProductServiceImpl implements ProductService{
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public void createProduct(CreateUpdateProductDTO createProductDTO) {
-        Product existingProduct = productRepository.findBySku(createProductDTO.getSku());
+        Product existingProduct = productRepository.findBySkuIgnoreCase(createProductDTO.getSku());
+        Product existingProductLocation = productRepository.findByLocationIgnoreCase(createProductDTO.getLocation());
         if(existingProduct != null) {
-            throw new ResourceNotFoundException("Sku ya asociado a un producto");
-        }else {
+            throw new ConflictException("Sku ya asociado a un producto");
+        }else if(existingProductLocation != null) {
+            throw new ConflictException("Ubicación ya está en uso por otro producto");
+        }
+        else {
             Product product = new Product();
             product.setSku(createProductDTO.getSku());
             product.setName(createProductDTO.getName());
@@ -59,6 +64,18 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public void updateProduct(Long product_id, CreateUpdateProductDTO createProductDTO) {
         Product product = findProductById(product_id);
+
+        Product productWithSameSku = productRepository.findBySkuIgnoreCase(createProductDTO.getSku());
+        if(productWithSameSku != null && !productWithSameSku.getId().equals(product.getId())) {
+            throw new ConflictException("SKU ya está asociado a otro producto");
+        }
+
+
+        Product productWithSameLocation = productRepository.findByLocationIgnoreCase(createProductDTO.getLocation());
+        if(productWithSameLocation != null && !productWithSameLocation.getId().equals(product.getId())) {
+            throw new ConflictException("La ubicación ingresada la está en uso por otro producto");
+        }
+
         product.setSku(createProductDTO.getSku());
         product.setName(createProductDTO.getName());
         product.setAmount(createProductDTO.getAmount());
@@ -79,17 +96,19 @@ public class ProductServiceImpl implements ProductService{
         return product;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
-    public ProductResponseDTO searchProduct(String data) {
-        Product product = productRepository.findBySku(data);
+    public ProductResponseDTO searchProductBySku(String sku) {
+        Product product = productRepository.findBySkuIgnoreCase(sku);
+        if(product == null) throw new ResourceNotFoundException("Producto no encontrado");
+        return productMapper.toDTO(product);
+    }
 
-        if(product == null) {
-            product = productRepository.findByName(data);
-        }
-        if(product == null) {
-            throw new ResourceNotFoundException("Producto no encontrado.");
-        }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Override
+    public ProductResponseDTO searchProdcutByName(String name) {
+        Product product = productRepository.findByNameIgnoreCase(name);
+        if(product == null) throw new ResourceNotFoundException("Producto no encontrado");
         return productMapper.toDTO(product);
     }
 
