@@ -53,8 +53,7 @@ Authorization: Bearer TU_TOKEN
 ### 1. Clonar repositorio
 
 ```bash
-git clone https://github.com/TU_USUARIO/TU_REPO.git
-cd TU_REPO
+git clone https://github.com/lValtiel/NexoRF-BackEnd.git
 ```
 
 ---
@@ -112,36 +111,12 @@ O directamente desde tu IDE ejecutando la clase principal.
 
 ---
 
-## 📡 Endpoints principales
-
-El backend expone endpoints para:
-
-- Autenticación (login)  
-- Productos  
-- Órdenes  
-- Flujo de picking  
-
-Ejemplos:
-
-```
-POST   /auth/login
-GET    /products
-POST   /orders
-PUT    /orders/{id}/status
-```
-
----
-
-## 🧠 Notas importantes
-
-- El estado de una orden se actualiza automáticamente a **Completado** cuando todas sus líneas han sido procesadas  
-- Se utiliza `spring.jpa.hibernate.ddl-auto=update`, por lo que las tablas se crean o actualizan automáticamente  
-- Algunas operaciones utilizan hilos (`Thread`) para no bloquear la ejecución  
+## 🧠 Notas importantes 
 - Este backend está diseñado para ser consumido por un frontend en JavaFX  
 
 ---
 
 ## 🧑‍💻 Autor
 
-Desarrollado por Emerson.  
+Desarrollado por lValtiel.  
 Sistema completo de picking con arquitectura separada (backend + frontend).
